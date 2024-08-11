@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Card</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray-200 flex items-center justify-center min-h-screen p-6">
+  <main class="flex flex-col items-center justify-center w-full">
+    <div id="profileCard"
+      class="w-[30rem] p-6 rounded-xl bg-white shadow-lg border border-gray-200 relative overflow-hidden">
+      <div class="flex items-center gap-4 mb-4">
+        <img id="selectedImage" src="" alt="Selected Image"
+          class="w-[9.5rem] h-[10rem] rounded-full border-2 border-gray-300 object-cover relative">
+        <div class="w-[9.5rem] h-[10rem] flex items-center justify-center rounded-full bg-black absolute top-5.5">
+          <h2 class="text-center text-white text-5xl opacity-80">+</h2>
+        </div>
+        <div class="flex-1">
+          <h2 class="text-xl font-semibold">NAME: ALLEN</h2>
+          <h2 class="text-lg text-gray-700">AKA: LEN</h2>
+          <h2 class="text-lg text-gray-700">BIRTH: DEC 16, 2004</h2>
+          <h2 class="text-lg text-gray-700">SKILL: PROGRAMMING</h2>
+          <h2 class="text-lg text-gray-700">SIGN: Labrague</h2>
+        </div>
+      </div>
+    </div>
+    <input type="file" id="imageInput" accept="image/*" class="mt-4 p-2 border border-gray-300 rounded-lg">
+    <button class="mt-5 bg-red-500 text-white py-2 px-6 rounded-full shadow-md hover:bg-red-600 focus:outline-none"
+      id="downloadBtn">Download</button>
+  </main>
+
+  <script>
+    document.getElementById('imageInput').addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        const imgElement = document.getElementById('selectedImage');
+        imgElement.src = e.target.result;
+        imgElement.classList.remove('hidden'); // Show the image
+        imgElement.classList.add('z-50')
+      };
+
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      domtoimage.toPng(document.getElementById('profileCard'))
+        .then(function (dataUrl) {
+          const link = document.createElement('a');
+          link.download = 'profile-card.png';
+          link.href = dataUrl;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        })
+        .catch(function (error) {
+          console.error('Oops, something went wrong!', error);
+        });
+    });
+  </script>
+</body>
+
+</html>
